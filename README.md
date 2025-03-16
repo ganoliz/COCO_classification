@@ -6,8 +6,8 @@ Image classification of 4 classes(bird, airplane, train, boat) over [MS COCO 201
 
 ## Usage
 
-First, you can see my implementation in the demo folder ```classification.ipynb```.
-You can test on your own step-by-step.
+First, you can see my implementation in the demo folder [classification.ipynb](https://github.com/ganoliz/COCO_classification/blob/main/demo/classification.ipynb).
+You can also test step-by-step on your own.
 
 1. Download and place MS COCO data in the following path:
 
@@ -58,10 +58,12 @@ Training spans **70 epochs**, balancing sufficient learning without excessive ov
 ## Results
 
 Confusion Matrix:
+```
 [[49  2  0  0]
  [ 0 49  0  0]
  [ 0  1 48  0]
  [ 0  0  0 23]]
+```
 bird accuracy: 96.08%
 airplane accuracy: 100.00%
 train accuracy: 97.96%
