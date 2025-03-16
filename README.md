@@ -67,4 +67,4 @@ airplane accuracy: 100.00%
 train accuracy: 97.96%
 boat accuracy: 100.00%
 
-![image](https://github.com/ganoliz/COCO_classification/blob/main/images/test_example.png)
+![image](https://github.com/ganoliz/COCO_classification/blob/master/images/test_example.png)
