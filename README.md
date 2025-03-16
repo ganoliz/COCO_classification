@@ -26,22 +26,28 @@ You should have disk capacity more than 50 GB (train2017.zip is 18 GB).
 3. Generate 4 classes annotation by running this script:
 
 ```bash
-python annotation_prepare.py
+python annotation_prepare.py {args}
 ```
 
-4. Run evaluate.py scripts
+4. Visualize datasets
 
 ```bash
-python evaluate.py
+python vis_datasets.py {args}
 ```
 
-5. Run visualize.py scripts
+5. Run evaluate.py scripts
 
 ```bash
-python visualize.py
+python evaluate.py {args}
 ```
 
-6. Training on your own.
+6. Visualize prediction 
+
+```bash
+python vis_prediction.py {args}
+```
+
+7. Try to train on your own.
 
 Modify train.py code and run the script. 
 
