@@ -1,31 +1,42 @@
-# Use an official Python 3.10 base image
-FROM python:3.10
+# Use an official Python 3.10 base image with CUDA support
+FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
 
 # Set working directory inside the container
 WORKDIR /app
 
-# Copy all project files into the container (adjust if needed)
-COPY . .
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    MODEL_PATH=/app/models/best_model.pth \
+    BATCH_SIZE=32 \
+    NUM_WORKERS=4
 
-# Install system dependencies (if needed)
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     wget \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir \
-    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
-    matplotlib \
-    numpy \
-    pandas \
-    scikit-learn \
-    tqdm \
-    tensorboard \
-    opencv-python \
-    pycocotools  # For MS COCO dataset handling
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt .
 
-# Run the evaluation script when the container starts
-CMD ["python", "evaluate.py"]
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy source code
+COPY . .
+
+# Create directories for mounting
+RUN mkdir -p /app/data/images /app/data/annotations /app/models
+
+# Healthcheck to verify the container is running properly
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD python -c "import torch; print(torch.cuda.is_available())" || exit 1
+
+# Default command to run evaluation
+ENTRYPOINT ["python", "evaluate.py"]
+CMD ["--model_path", "${MODEL_PATH}", \
+     "--batch_size", "${BATCH_SIZE}", \
+     "--num_workers", "${NUM_WORKERS}"]
